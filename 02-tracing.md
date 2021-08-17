@@ -121,6 +121,7 @@ Steeltoe.Discovery.ClientCore
 Steeltoe.Discovery.Eureka
 System.Net.Http.Json
 Steeltoe.Management.TracingCore
+OpenTelemetry.Exporter.Zipkin
 ```
 
 # [Visual Studio](#tab/visual-studio)
@@ -141,9 +142,12 @@ From solution folder
 dotnet add WeatherClient\WeatherClient.csproj package Steeltoe.Discovery.ClientCore
 dotnet add WeatherClient\WeatherClient.csproj package Steeltoe.Discovery.Eureka
 dotnet add WeatherClient\WeatherClient.csproj package System.Net.Http.Json
+dotnet add WeatherClient\WeatherClient.csproj package OpenTelemetry.Exporter.Zipkin
 dotnet add WeatherService\WeatherService.csproj package Steeltoe.Discovery.ClientCore
 dotnet add WeatherService\WeatherService.csproj package Steeltoe.Discovery.Eureka
 dotnet add WeatherService\WeatherService.csproj package System.Net.Http.Json
+dotnet add WeatherService\WeatherService.csproj package OpenTelemetry.Exporter.Zipkin
+
 ```
 
 ---
@@ -229,9 +233,9 @@ Finally, set the eureka URL by editing appsettings.json in **both** WeatherServi
 
  
 
-## Run Eureka discovery service
+## Run Eureka discovery service and Zipkin
 
-Lets launch our eureka registry before starting the app
+Lets launch our eureka registry and zipkin before starting the app
 
 # [Java Jar](#tab/java-jar)
 
@@ -239,12 +243,14 @@ From terminal set to folder where you downloaded JAR, invoke
 
 ```powershell
 java -jar eureka-2.5.3.jar
+java -jar zipkin-server-2.23.2-exec.jar
 ```
 
 # [.NET CLI](#tab/docker)
 
 ```powershell
 docker run -it --rm -p:8080:8080 steeltoeoss/eureka
+docker run -it --rm -p 9411:9411 openzipkin/zipkin
 ```
 
 ---
@@ -287,18 +293,30 @@ Confirm that both apps registered with Eureka by browsing to http://localhost:87
 
 Access WeatherClient to make it fetch reports from WeatherService: http://localhost:5010/WeatherForecast
 
-Notice how the URL was automatically resolved to correct URL for WeatherService
-
 ```
 info: System.Net.Http.HttpClient.WeatherClient.LogicalHandler[100]
-      Start processing HTTP request GET http://weatherservice/weatherforecast
+       [WeatherClient,9c34182af0cdef4c8a2d6ec19da06f28,aabf1786817ef54a,true] Start processing HTTP request GET http://weatherservice/weatherforecast
 info: System.Net.Http.HttpClient.WeatherClient.ClientHandler[100]
-      Sending HTTP request GET http://localhost:5000/weatherforecast
+       [WeatherClient,9c34182af0cdef4c8a2d6ec19da06f28,aabf1786817ef54a,true] Sending HTTP request GET http://localhost:5000/weatherforecast
 info: System.Net.Http.HttpClient.WeatherClient.ClientHandler[101]
-      Received HTTP response headers after 73.4696ms - 200
+       [WeatherClient,9c34182af0cdef4c8a2d6ec19da06f28,aabf1786817ef54a,true] Received HTTP response headers after 81.0985ms - 200
 info: System.Net.Http.HttpClient.WeatherClient.LogicalHandler[101]
-      End processing HTTP request after 89.0094ms - 200
+       [WeatherClient,9c34182af0cdef4c8a2d6ec19da06f28,aabf1786817ef54a,true] End processing HTTP request after 97.977ms - 200
 info: WeatherClient.Services.ForecastClient[0]
-      Received 5 forecasts
+       [WeatherClient,9c34182af0cdef4c8a2d6ec19da06f28,aabf1786817ef54a,true] Received 5 forecasts
 ```
+
+Notice how the URL was automatically resolved to correct URL for WeatherService even though we never had to specify it anywhere in the client. Also note that each log entry is stamped with zipkin trace information. This allows correlation of logs across services when this is exported to a logging solution that supports Zipkin. 
+
+## View distributed trace
+
+Access Zipkin at http://localhost:9411/. You should see some requests already have been captured. 
+
+![image-20210817175124100](images/zipkin-overview.png)
+
+Click on the one that has multiple spans
+
+Observe how we can view the request spanning multiple services as a single logical request stack. Information associated with each child call can be looked at individually.
+
+![image-20210817175511460](images/zipkin-details.png)
 
