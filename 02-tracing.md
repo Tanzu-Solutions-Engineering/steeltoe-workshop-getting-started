@@ -221,7 +221,7 @@ public async Task<IEnumerable<WeatherForecast>> Get([FromServices]ForecastClient
 }
 ```
 
-Finally, set the eureka URL by editing appsettings.json in **both** WeatherService and WeatherClient and adding the following:
+Finally, set the eureka URL by editing appsettings.json in **both** WeatherService and WeatherClient and adding the following. The url defaults to the one below so this step can be skipped in local environments.
 
 ```json
   "Eureka": {
