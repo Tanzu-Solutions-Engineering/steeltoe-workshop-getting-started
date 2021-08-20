@@ -1,23 +1,4 @@
-﻿---
-uid: guides/get-to-know-steeltoe/exercise4
-_disableContribution: true
-_disableToc: false
-_disableFooter: true
-_homePath: "./index.html"
-_disableNav: true
-_hideTocVersionToggle: true
----
-
-[home-page-link]: index.md
-[exercise-1-link]: exercise1.md
-[exercise-2-link]: exercise2.md
-[exercise-3-link]: exercise3.md
-[exercise-4-link]: exercise4.md
-[summary-link]: summary.md
-
-| [<< Previous Exercise][exercise-3-link] |     |
-| :-------------------------------------- | --: |
-
+﻿
 # Using an external configuration provider
 
 ## Goal
@@ -33,7 +14,7 @@ With a running instance of Spring Config server, navigate to an endpoint in a .N
 
 ## Get Started
 
-To communicate with an external config server we're going to need to add a client to the previously created application.
+To communicate with an external config server we're going to need to add a client to the previously created application. We're also going to add placeholder provider that allows us to define config values by referencing OTHER config sections as variables, reducing duplication.  
 
 # [Visual Studio](#tab/visual-studio)
 
@@ -41,10 +22,19 @@ Right click on the project name in the solution explorer and choose "Manage NuGe
 
 <img src="images/vs-add-configserver.png" alt="Add configuration server library" width="100%">
 
+also add this package
+
+```
+Steeltoe.Extensions.Configuration.PlaceholderCore
+```
+
+
+
 # [.NET CLI](#tab/dotnet-cli)
 
 ```powershell
 dotnet add package Steeltoe.Extensions.Configuration.ConfigServerCore
+dotnet add package Steeltoe.Extensions.Configuration.PlaceholderCore
 ```
 
 ---
@@ -82,23 +72,23 @@ public string GetLocation([FromServices] IConfiguration config) => config.GetVal
 
  
 
-In 'appsettings.json' add the following json just below the "sqlserver" section. This should be preloaded with the correct connection values of a Spring Config server.
+In 'appsettings.json' **add** the following json just below to the `Spring` section. Config server reads which environment it should config for by reading `Spring:Cloud:Config:Env` configuration key. We're going to map its value with Steeltoe placeholder provider to `ASPNETCORE_ENVIRONMENT`, which is the default way for configuring environments in ASP.NET Core.
 
 ```json
-,"Spring": {
+"Spring": {
   "Application": {
-    "Name": "myapplication"
-  },
+      "Name": "WeatherService"
+    },
   "Cloud": {
     "Config": {
-      "Uri": "http://localhost:8888",
+      "Env": "${ASPNETCORE_ENVIRONMENT}",
     }
   }
 }
 ```
 
 > [!NOTE]
-> Notice the value of 'spring:application:name' in the json. This value of "myapplication" will be used to connect the correct values in the Spring Config server.
+> Notice the value of `spring:application:name` in the json. This value of "WeatherService" will be used to connect the correct values in the Spring Config server, as the config server can be servicing multiple apps.
 
 ## Run Config Server
 
@@ -131,7 +121,7 @@ docker run -e SPRING_CLOUD_CONFIG_SERVER_GIT_URI=https://github.com/macsux/works
 
 ## Run the application
 
-With the data context in place, we are ready to see everything in action. Run the application.
+Lets launch WeatherService 
 
 # [Visual Studio](#tab/visual-studio)
 
@@ -151,25 +141,13 @@ dotnet run
 
 With the application running, access `http://localhost:5000/weatherforecast/location`.
 
-If
+You should see the value of `Toronto` displayed. Now examine the config repo we used for config server: https://github.com/macsux/workshop-config-repo, specifically `WeatherService.yml` and `WeatherService-Development.yml`. By default, when launching locally, the app starts in "Development" environment. Now lets change it to run under production environment.
 
-## See the config values output
+Edit `Properties\launchSettings.json` and change value for `ASPNETCORE_ENVIRONMENT` to `Production` under `WeatherService` profile.
 
-To execute the values endpoint, replace `WeatherForecast` with `values` in the browser address bar. The values will be retrieved from the Spring Config server and output in the window.
+Relaunch the app and check `http://localhost:5000/weatherforecast/location` again. You should see `New York`. 
 
-```json
-["hello from development config"]
-```
 
-## Stop the application
-
-# [Visual Studio](#tab/visual-studio)
-
-Either close the browser window or click the red stop button in the top menu.
-
-# [.NET CLI](#tab/dotnet-cli)
-
-Use the key combination "ctrl+c" on windows/linux or "cmd+c" on Mac.
 
 ---
 
@@ -177,7 +155,4 @@ Use the key combination "ctrl+c" on windows/linux or "cmd+c" on Mac.
 
 With an existing Spring Config server running that was configured to retrieve values from a yaml file, we added a Spring Config client to our application and output the retrieved vale. With this architecture in place you can now do things like updating the yaml file and visit the `/actuator/refresh` management endpoint in the application. This will automatically refresh values within the application without and down time (or restart). You could store a server's connection name in the yaml and have the application retrieve the value. As the application moves through different environments (dev, test, staging, prod) the connection value can change, but the original tested application stays unchanged.
 
-We've just begun to scratch the surface of what Spring Config can really do and all it's many features. Learn more about config in the [Steeltoe docs](/api/v3/configuration/config-server-provider.html).
-
-| [<< Previous Exercise][exercise-3-link] | [Workshop Summary >>][summary-link] |
-| :-------------------------------------- | ----------------------------------: |
+We've just begun to scratch the surface of what Spring Config can really do and all it's many features. Learn more about config in the [Steeltoe docs](https://steeltoe.io/api/v3/configuration/config-server-provider.html).
