@@ -1,0 +1,1 @@
+java -jar eureka-2.5.4.jar

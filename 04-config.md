@@ -33,8 +33,8 @@ Steeltoe.Extensions.Configuration.PlaceholderCore
 # [.NET CLI](#tab/dotnet-cli)
 
 ```powershell
-dotnet add package Steeltoe.Extensions.Configuration.ConfigServerCore
-dotnet add package Steeltoe.Extensions.Configuration.PlaceholderCore
+dotnet add WeatherService\WeatherService.csproj package Steeltoe.Extensions.Configuration.ConfigServerCore
+dotnet add WeatherService\WeatherService.csproj package Steeltoe.Extensions.Configuration.PlaceholderCore
 ```
 
 ---
@@ -75,15 +75,30 @@ public string GetLocation([FromServices] IConfiguration config) => config.GetVal
 In 'appsettings.json' **add** the following json just below to the `Spring` section. Config server reads which environment it should config for by reading `Spring:Cloud:Config:Env` configuration key. We're going to map its value with Steeltoe placeholder provider to `ASPNETCORE_ENVIRONMENT`, which is the default way for configuring environments in ASP.NET Core.
 
 ```json
-"Spring": {
-  "Application": {
+{
+...
+  "Spring": {
+    "Application": {
       "Name": "WeatherService"
     },
-  "Cloud": {
-    "Config": {
-      "Env": "${ASPNETCORE_ENVIRONMENT}",
+    "Boot": {
+      "Admin": {
+        "Client": {
+          "Url": "http://localhost:8080",
+          "Metadata": {
+            "user.name": "actuatorUser",
+            "user.password": "actuatorPassword"
+          }
+        }
+      }
+    },
+    "Cloud": {
+      "Config": {
+        "Env": "${ASPNETCORE_ENVIRONMENT}"
+      }
     }
-  }
+  },
+...
 }
 ```
 

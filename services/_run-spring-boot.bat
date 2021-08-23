@@ -1,0 +1,1 @@
+java -jar spring-boot-admin-2.5.3.jar
