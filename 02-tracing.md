@@ -143,11 +143,12 @@ dotnet add WeatherClient\WeatherClient.csproj package Steeltoe.Discovery.ClientC
 dotnet add WeatherClient\WeatherClient.csproj package Steeltoe.Discovery.Eureka
 dotnet add WeatherClient\WeatherClient.csproj package System.Net.Http.Json
 dotnet add WeatherClient\WeatherClient.csproj package OpenTelemetry.Exporter.Zipkin
+dotnet add WeatherClient\WeatherClient.csproj package Steeltoe.Management.TracingCore
 dotnet add WeatherService\WeatherService.csproj package Steeltoe.Discovery.ClientCore
 dotnet add WeatherService\WeatherService.csproj package Steeltoe.Discovery.Eureka
 dotnet add WeatherService\WeatherService.csproj package System.Net.Http.Json
 dotnet add WeatherService\WeatherService.csproj package OpenTelemetry.Exporter.Zipkin
-
+dotnet add WeatherService\WeatherService.csproj package Steeltoe.Management.TracingCore
 ```
 
 ---
@@ -242,7 +243,7 @@ Lets launch our eureka registry and zipkin before starting the app
 From terminal set to folder where you downloaded JAR, invoke 
 
 ```powershell
-java -jar eureka-2.5.3.jar
+java -jar eureka-2.5.4.jar
 java -jar zipkin-server-2.23.2-exec.jar
 ```
 

@@ -32,7 +32,7 @@ The default project name WeatherService will be used throughout
 ![image-20210817111643891](images/new-project-2.png)
 
 Choose .NET 5.0 as the target framework and turn off HTTPS support to make things simple for this tutorial.
-![image-20210817110742843](../../../Users/andre/AppData/Roaming/Typora/typora-user-images/image-20210817110742843.png)
+![image-20210817110742843](images/vs-no-https.png)
 
 After project opens, switch default launch profile to use Kestrel instead of IIS. You can do this by clicking the arrow next to play button and select WeatherService.
 
@@ -185,7 +185,7 @@ Lets also give our app a name and point it to the Spring Boot Admin endpoint. Ed
 
 ```json
 {  
-	"Spring": {
+  "Spring": {
     "Application": {
       "Name": "WeatherService"
     },
