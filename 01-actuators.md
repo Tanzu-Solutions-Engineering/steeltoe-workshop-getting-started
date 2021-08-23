@@ -21,8 +21,6 @@ Begin building an API that will be enhanced with more components in the next exe
 
 Let's start by creating a brand new .NET Core webapi project.
 
-# [Visual Studio](#tab/visual-studio)
-
 Select "Create a new project". (If Visual Studio is already open, choose `File > New > Project`.)
 
 Choose "ASP.NET Core Web API" from the default templates.
@@ -38,24 +36,7 @@ After project opens, switch default launch profile to use Kestrel instead of IIS
 
 ![image-20210817124926139](images/vs-start-debug.png)
 
-# [.NET CLI](#tab/dotnet-cli)
 
-```powershell
-mkdir WeatherService
-cd WeatherService
-dotnet new sln -n WeatherService
-dotnet new webapi -n WeatherService --no-https
-dotnet sln add .\WeatherService\WeatherService.csproj
-cd WeatherService
-```
-
-
-
-To use VS Code as your IDE:
-
-```powershell
-code .
-```
 
 ---
 
@@ -63,26 +44,19 @@ code .
 
 Once the project is created and opened in your IDE, the first action is to bring in the Steeltoe packages to the app. 
 
-# [Visual Studio](#tab/visual-studio)
+** We will be using PowerShell to speed up adding necessary NuGet dependencies to speed things up and avoid any mistakes. Same steps can be accomplished via Visual Studio IDE Nuget integration**
 
-Right click on the project name in the solution explorer and choose "Manage NuGet packages...". In the package manger window choose "Browse", then search and add the following packages: 
+Open Visual Studio Terminal window by going to `View ->  Terminal`
 
-```
-Steeltoe.Bootstrap.Autoconfig
-Steeltoe.Management.Endpointcore
-Steeltoe.Extensions.Logging.DynamicLogger
-Steeltoe.Extensions.Configuration.SpringBootCore
-```
+![image-20210823143451686](images/vs-terminal-window.png)
 
-![image-20210817113133334](images/vs-add-nuget.png)
-
-# [.NET CLI](#tab/dotnet-cli)
+# 
 
 ```powershell
-dotnet add package Steeltoe.Bootstrap.Autoconfig
-dotnet add package Steeltoe.Management.Endpointcore
-dotnet add package Steeltoe.Extensions.Logging.DynamicLogger
-dotnet add package Steeltoe.Extensions.Configuration.SpringBootCore
+dotnet add WeatherService\WeatherService.csproj package Steeltoe.Bootstrap.Autoconfig
+dotnet add WeatherService\WeatherService.csproj package Steeltoe.Management.Endpointcore
+dotnet add WeatherService\WeatherService.csproj package Steeltoe.Extensions.Logging.DynamicLogger
+dotnet add WeatherService\WeatherService.csproj package Steeltoe.Extensions.Configuration.SpringBootCore
 ```
 
 ---
@@ -152,23 +126,11 @@ public IEnumerable<WeatherForecast> Get()
 
 Spring Boot Admin project is a Web UI application that you can run as either a docker container or a simple java app. When configured in your application, it will register itself on startup with Spring Boot Admin which in turn will start monitoring the app's actuator endpoints to gather and expose telemetry via an administrative management portal. 
 
-Launch Spring Boot Admin
+Launch Spring Boot Admin by running 
 
-# [Java Jar](#tab/java-jar)
-
-From terminal set to folder where you downloaded JAR, invoke 
-
-```powershell
-java -jar spring-boot-admin-2.5.3.jar
-```
-
-# [.NET CLI](#tab/docker)
-
-```powershell
-docker run -it --rm -p:8080:8080 steeltoeoss/spring-boot-admin
-```
-
----
+````
+c:\workshop\services\_run-spring-boot.bat
+````
 
 Modify your app to register with Spring Boot Admin. Edit `Startup.cs` as following:
 
@@ -205,27 +167,13 @@ Lets also give our app a name and point it to the Spring Boot Admin endpoint. Ed
 }
 ```
 
-Note that we've configured metadata to supply name and password that Spring Boot Admin can use to authenticate with our endpoints. This will be sent during the initial registration. Since we didn't setup actuator security, this configuration doesn't affect anything at this stage.
+>  Note that we've configured metadata to supply name and password that Spring Boot Admin can use to authenticate with our endpoints. This will be sent during the initial registration. Since we didn't setup actuator security, this configuration doesn't affect anything at this stage.
 
 ## Run the application
 
 With everything configured, lets see it all come together in action. 
 
 Run the application.
-
-# [Visual Studio](#tab/visual-studio)
-
-Then click play button on toolbar 
-
-# [.NET CLI](#tab/dotnet-cli)
-
-Executing the below command will start the application (inside project folder). 
-
-```powershell
-dotnet run
-```
-
-
 
 ## Discovering the actuators
 

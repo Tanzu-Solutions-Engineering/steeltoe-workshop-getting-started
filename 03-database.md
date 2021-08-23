@@ -8,22 +8,13 @@ Connect the backend to the database with Steeltoe Connectors and see how connect
 
 App initializes the database and serves weather forecasts from the database
 
-> [!NOTE]
-> For this exercise an MS SQL database have already been initialized. The settings have been preloaded below.
-
 ## Get Started
 
 We're going to add a database connection and context using entity framework to the previously created application.
 
-# [Visual Studio](#tab/visual-studio)
+Lets add some NuGet packages to WeatherService
 
-Right click on the project name in the solution explorer and choose "Manage NuGet packages...". In the package manger window choose "Browse", then search for `Steeltoe.Connector.EFCore`, and install.
-<img src="images/vs-add-efcore.png" alt="Steeltoe EFCore NuGet dependency" width="100%">
-
-Then search for the `Microsoft.EntityFrameworkCore.SqlServer` package and install.
-<img src="images/vs-add-efsqlserver.png" alt="Microsoft SqlServer EFCore NuGet dependency" width="100%">
-
-# [.NET CLI](#tab/dotnet-cli)
+### Terminal
 
 ```powershell
 dotnet add WeatherService\WeatherService.csproj package Steeltoe.Connector.EFCore
@@ -37,22 +28,15 @@ dotnet add WeatherService\WeatherService.csproj package Steeltoe.Management.Task
 
 Now create a new folder in the project named 'Models'.
 
-# [Visual Studio](#tab/visual-studio)
-
 Right click on the WeatherService project name in the solution explorer and choose "Add" > "New Folder" and name it `Models`.
 
 <img src="images/vs-new-folder.png" alt="Create a new project folder" width="100%">
 
-# [.NET CLI](#tab/dotnet-cli)
 
-```powershell
-mkdir "Models"
-cd "Models"
-```
 
 ---
 
-Within that folder create a new class named 'WeatherContext.cs'. This class will serve as our context for interacting with the database.
+Within that folder create a new class named `WeatherContext.cs`. This class will serve as our context for interacting with the database.
 
 Open the newly created class file in your IDE and make it look like the following
 
@@ -86,9 +70,6 @@ public class WeatherForecast
 ## Implement the database context and ensure its creation
 
 Now that we have created the 'WeatherContext' we need to add it to the services container.
-
-> [NOTE!]
-> If prompted, there is not need to add any other packages like a SqlClient. The Steeltoe package takes care of everything.
 
 Open "Startup.cs" in your IDE and add the using statement
 
@@ -162,18 +143,6 @@ Add the below json to 'appsettings.json', just after the 'management' section. T
   }
 }
 ```
-
-If you have SQL Express installed, it is running locally and the above connection string would work out of the box. You can also lauch SQL Server as a docker image as following:
-
-```
-docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=IheartSteeltoe1" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2019-latest
-```
-
-For docker based setup, set the connection string to
-
-````
-Server=localhost;Database=WeatherForecast;User Id=sa;Password=IheartSteeltoe1;
-````
 
 
 
@@ -283,19 +252,11 @@ info: WeatherService.SeedTask[0]
 
 Start the solution as before 
 
-# [Visual Studio](#tab/visual-studio)
-
 Click the Play button on your toolbar
 
 ![image-20210819130203328](images/vs-multi-project-start2.png)
 
-# [.NET CLI](#tab/dotnet-cli)
 
-Run weather service 
-
-```
-dotnet run -p WeatherService\WeatherService.csproj
-```
 
 ------
 

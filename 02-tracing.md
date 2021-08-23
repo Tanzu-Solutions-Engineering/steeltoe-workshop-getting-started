@@ -10,7 +10,7 @@ A client application talks to backend service by referencing it by common name i
 
 ## Get Started
 
-Start by adding a new project to our existing solution. In order to automate the process and skip some boilerplate instructions, lets do this from command line. Open command line to directory with our solution file, and run the following commands:
+Start by adding a new project to our existing solution. In order to automate the process and skip some boilerplate instructions, lets do this from command line. From Visual Studio terminal prompt, run the following commands:
 
  ```powershell
  dotnet new webapi -n WeatherClient --no-https
@@ -114,29 +114,7 @@ At this point both projects are configured to register with Spring Boot Admin an
 
 We're also going to add distributed tracing and export the results to Zipkin to allow calls to be traced across both services.
 
-Add the following dependencies to both projects:
-
-```
-Steeltoe.Discovery.ClientCore
-Steeltoe.Discovery.Eureka
-System.Net.Http.Json
-Steeltoe.Management.TracingCore
-OpenTelemetry.Exporter.Zipkin
-```
-
-# [Visual Studio](#tab/visual-studio)
-
-Right click on solution in Solution Explorer, and click Manage Nuget Packages in Solution
-
-![image-20210817140221425](images/add-nuget-to-solution.png)
-
-On the Browse tab, Search for the packages specified, and put checkboxes on each project, then click Install.
-
-![image-20210817140426094](images/vs-solution-nuget.png) 
-
-# [.NET CLI](#tab/dotnet-cli)
-
-From solution folder
+Add the following dependencies to both projects by running these commands in Visual Studio terminal:
 
 ```powershell
 dotnet add WeatherClient\WeatherClient.csproj package Steeltoe.Discovery.ClientCore
@@ -236,31 +214,18 @@ Finally, set the eureka URL by editing appsettings.json in **both** WeatherServi
 
 ## Run Eureka discovery service and Zipkin
 
-Lets launch our eureka registry and zipkin before starting the app
+Lets launch our eureka registry and zipkin before starting the app. You can do this via bat files in `c:\workshop\services`.
 
-# [Java Jar](#tab/java-jar)
-
-From terminal set to folder where you downloaded JAR, invoke 
-
-```powershell
-java -jar eureka-2.5.4.jar
-java -jar zipkin-server-2.23.2-exec.jar
+```
+c:\workshop\services\_run-eureka.bat
+c:\workshop\services\_run-zipkin.bat
 ```
 
-# [.NET CLI](#tab/docker)
 
-```powershell
-docker run -it --rm -p:8080:8080 steeltoeoss/eureka
-docker run -it --rm -p 9411:9411 openzipkin/zipkin
-```
-
----
 
 ## Start projects
 
 Lets start both projects and see it all in action
-
-# [Visual Studio](#tab/visual-studio)
 
 Right click on the solution in Solution explorer, and click Properties
 
@@ -269,20 +234,6 @@ Right click on the solution in Solution explorer, and click Properties
 Under Startup Project, switch to Multiple startup projects, and set Action of each project to Start
 
 ![image-20210817144639290](images/vs-multi-project-start.png)
-
-# [.NET CLI](#tab/dotnet-cli)
-
-Open two command prompts and run the following in each project folder
-
-```powershell
-WeatherService > dotnet run
-```
-
-
-
-```
-WeatherClient> dotnet run
-```
 
 
 
