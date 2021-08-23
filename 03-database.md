@@ -244,7 +244,7 @@ using Steeltoe.Management.TaskCore;
 ...
 public void ConfigureServices(IServiceCollection services)
 {
-  services.AddTask<SeedTask>();
+  services.AddTask<SeedTask>(ServiceLifetime.Scoped);
   ...
 ```
 
