@@ -266,7 +266,7 @@ public static void Main(string[] args)
 Invoke the seed command by launching the app with "runtask seed" argument. Open terminal, switch to WeatherService project folder (where WeatherService.csproj file is), and invoke the following command:
 
 ```powershell
-dotnet run runtask=seed
+dotnet run -p WeatherService\WeatherService.csproj runtask=seed
 ```
 
 If you did everything correctly you should see
@@ -294,7 +294,7 @@ Click the Play button on your toolbar
 Run weather service 
 
 ```
-WeatherService > dotnet run
+dotnet run -p WeatherService\WeatherService.csproj
 ```
 
 ------
