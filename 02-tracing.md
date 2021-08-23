@@ -86,7 +86,7 @@ Replace appsettings.json in WeatherClient with following:
 }
 ```
 
-Lets also make it run on a different port then our backend. Edit `Properties\launchSettings.json` and change it as following:
+Lets also make it run on a different port then our backend. Edit `Properties\launchSettings.json` and **REPLACE** it as following. This will remove the default IIS launch profile which we don't need.
 
 ```json
 {

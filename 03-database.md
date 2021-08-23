@@ -28,6 +28,7 @@ Then search for the `Microsoft.EntityFrameworkCore.SqlServer` package and instal
 ```powershell
 dotnet add WeatherService\WeatherService.csproj package Steeltoe.Connector.EFCore
 dotnet add WeatherService\WeatherService.csproj package Microsoft.EntityFrameworkCore.SqlServer
+dotnet add WeatherService\WeatherService.csproj package Steeltoe.Management.TaskCore
 ```
 
 ---
