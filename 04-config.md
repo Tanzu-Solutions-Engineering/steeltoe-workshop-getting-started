@@ -26,24 +26,7 @@ dotnet add WeatherService\WeatherService.csproj package Steeltoe.Extensions.Conf
 
 ---
 
-## Implement Spring Config client
 
-Open `Program.cs` and implement a Spring Config client in the host builder.
-
-```csharp
-using Steeltoe.Extensions.Configuration.ConfigServer;
-```
-
-```csharp
-public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .AddConfigServer()
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                })
-                .AddSteeltoe();
-```
 
 ## Modify controller to read config
 
@@ -111,7 +94,7 @@ Lets launch WeatherService
 
 Clicking the `Debug > Start Debugging` top menu item. With the application running, access `http://localhost:5000/weatherforecast/location`.
 
-You should see the value of `Toronto` displayed. Now examine the config repo we used for config server: https://github.com/macsux/workshop-config-repo, specifically `WeatherService.yml` and `WeatherService-Development.yml`. By default, when launching locally, the app starts in "Development" environment. Now lets change it to run under production environment.
+You should see the value of `Toronto` displayed. Now examine the config repo we used for config server:https://github.com/Tanzu-Solutions-Engineering/steeltoe-workshop-config-repo, specifically `WeatherService.yml` and `WeatherService-Development.yml`. By default, when launching locally, the app starts in "Development" environment. Now lets change it to run under production environment.
 
 Edit `Properties\launchSettings.json` and change value for `ASPNETCORE_ENVIRONMENT` to `Production` under `WeatherService` profile.
 

@@ -3,11 +3,8 @@
 ## Prerequisities
 
 * .NET 5 SDK
-* IDE of choice such as Visual Studio, Visual Studio Code, or Rider
-* One of:
-  * Docker /w Linux containers (if launching dependencies in containers)
-  * OR
-  * Java 11  (if launching dependencies directly as jar). Download binaries from https://github.com/Tanzu-Solutions-Engineering/spring-cloud-binaries/releases/tag/2.5.3
+* Visual Studio
+* Java 11  (if launching dependencies directly as jar). Download binaries from https://github.com/Tanzu-Solutions-Engineering/spring-cloud-binaries/releases/tag/2.5.3
 
 ## Goal
 
